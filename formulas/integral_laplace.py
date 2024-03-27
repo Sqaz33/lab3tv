@@ -18,6 +18,6 @@ class IntegralLaplace:
         x1 = (m1 - n*p) / (n * p * q)**0.5
         x2 = (m2 - n*p) / (n * p * q)**0.5
 
-        integral = self.integral(x1, x2)
+        integral = self.integral(x2, x1)
 
         return 1 / ((2*pi)**0.5) * integral

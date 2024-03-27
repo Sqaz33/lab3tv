@@ -1,10 +1,10 @@
 from math import factorial as fact
-from inequality_operations import InequalityOperations
+from operations_enum import OperationsEnum
 
 
 class BernuliCalcul:
     def comb(self, m, n) -> int:
-        if n == 0 or m == 0 or m > n:
+        if m > n:
             return 0
         return fact(n) / (fact(n - m) * fact(m))
 
@@ -15,15 +15,15 @@ class BernuliCalcul:
     def bernuli_in_range(self, n: int, m1: int, m2: int, p: float) -> float:
         return sum(self.bernuli(n, m, p) for m in range(m1, m2+1))
 
-    def bernuli_calul(self, n: int, m1: int, m2: int, p: float, operation: InequalityOperations) -> float:
+    def bernuli_calcul(self, n: int, m1: int, m2: int, p: float, operation: OperationsEnum) -> float:
         match operation:
-            case InequalityOperations.equal:
+            case OperationsEnum.equal:
                 return self.bernuli(n, m1, p)
-            case InequalityOperations.less:
+            case OperationsEnum.less:
                 return self.bernuli_in_range(n, m1-1, 0, p)
-            case InequalityOperations.more_or_equal:
+            case OperationsEnum.more_or_equal:
                 return 1 - self.bernuli_in_range(n, m1-1, 0, p)
-            case InequalityOperations.between:
+            case OperationsEnum.between:
                 return self.bernuli_in_range(n, m1, m2, p)
 
     def bernuli_polynomial(self, m: list[int], p: list[int]) -> float:
