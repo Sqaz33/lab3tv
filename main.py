@@ -1,7 +1,8 @@
-import formulas
+import app
 
 
 if __name__ == '__main__':
-    pass
+    a = app.App()
+    a.run()
 
 

@@ -92,6 +92,7 @@ class Ui_Widget(object):
         self.verticalLayout_5.addLayout(self.verticalLayout_8)
         self.horizontalLayout_5 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_5.setObjectName("horizontalLayout_5")
+        self.verticalLayout_5.addLayout(self.horizontalLayout_5)
         self.verticalLayout_7 = QtWidgets.QVBoxLayout()
         self.verticalLayout_7.setObjectName("verticalLayout_7")
         self.horizontalLayout_8 = QtWidgets.QHBoxLayout()
@@ -127,8 +128,7 @@ class Ui_Widget(object):
         self.m2_ber.setObjectName("m2_ber")
         self.horizontalLayout_8.addWidget(self.m2_ber)
         self.verticalLayout_7.addLayout(self.horizontalLayout_8)
-        self.horizontalLayout_5.addLayout(self.verticalLayout_7)
-        self.verticalLayout_5.addLayout(self.horizontalLayout_5)
+        self.verticalLayout_5.addLayout(self.verticalLayout_7)
         self.label_13 = QtWidgets.QLabel(self.page_1)
         font = QtGui.QFont()
         font.setPointSize(10)
@@ -378,7 +378,7 @@ class Ui_Widget(object):
         self.verticalLayout_6.addLayout(self.verticalLayout)
 
         self.retranslateUi(Widget)
-        self.stackedWidget.setCurrentIndex(2)
+        self.stackedWidget.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(Widget)
 
     def retranslateUi(self, Widget):

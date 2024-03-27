@@ -12,11 +12,19 @@ class IntegralLaplace:
         integral2 = sum(self.integral_term(n, x2) for n in range(70))
         return integral1 - integral2
 
+    def x1(self, n: int, p: float, m1: int) -> float:
+        q = 1 - p
+        return (m1 - n*p) / (n * p * q)**0.5
+
+    def x2(self, n: int, p: float, m2: int) -> float:
+        q = 1 - p
+        return (m2 - n*p) / (n * p * q)**0.5
+
     def laplace_integer(self, n: int, m1: int, m2: int, p: float) -> float:
         q = 1 - p
 
-        x1 = (m1 - n*p) / (n * p * q)**0.5
-        x2 = (m2 - n*p) / (n * p * q)**0.5
+        x1 = self.x1(n, p, m1)
+        x2 = self.x2(n, p, m2)
 
         integral = self.integral(x2, x1)
 

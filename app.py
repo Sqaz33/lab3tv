@@ -1,110 +1,99 @@
-from .form import Ui_Widget
-from app_behavior import AppBehavior
-from calculator import Calculator
+from task_enum import TaskEnum
+from bernuli_oper_enum import BernuliOperEnum
+from formulas import BernuliCalcul, IntegralLaplace
+import form
 
+import sys
+from PyQt5 import QtWidgets
 from PyQt5.QtGui import QPixmap
 
 
-class Ui:
-    def __init__(self, ui_widget: Ui_Widget, calculator: Calculator, behavior: AppBehavior):
-        self.behavior = behavior
-        self.ui_widget = ui_widget
-        self.observers = []
-        self.calculator = calculator
+class App:
+    def __init__(self):
+        self.bernuli = BernuliCalcul()
+        self.laplace = IntegralLaplace()
+
+        self.app = QtWidgets.QApplication(sys.argv)
+        self.Widget = QtWidgets.QWidget()
+        self.ui = form.Ui_Widget()
+        self.ui.setupUi(self.Widget)
 
         # -----------загрузка картинок------
-        self.scheme_pixmap = QPixmap()
-        self.scheme_pixmap.load("formulas/number1/scheme.png")
-        self.first_number_formula = QPixmap()
-        self.first_number_formula.load("formulas/number1/prob_formulas.png")
 
-        self.prom = QPixmap()
-        self.prom.load("formulas/number3/prom3")
-
-        self.sobs = [QPixmap() for i in range(0, 4)]
-        for i in range(1, 5):
-            self.sobs[i - 1].load("formulas/number3/sob" + str(i))
-
-        self.vers = [QPixmap() for i in range(0, 4)]
-        for i in range(1, 5):
-            self.vers[i - 1].load("formulas/number3/ver" + str(i))
-
-        self.fourth_number_formulas = [QPixmap() for i in range(0, 2)]
-        self.fourth_number_formulas[1].load("formulas/number4/bayes.png")
-        self.fourth_number_formulas[0].load("formulas/number4/total_prob.png")
         # ----------------------------------
 
         # ----------коннекты-----------
-        self.ui_widget.task_selection.currentIndexChanged.connect(self.task_changed)
-        self.ui_widget.compute_button.clicked.connect(self.set_answer)
-        self.ui_widget.compute_button_2.clicked.connect(self.set_answer)
-        self.ui_widget.compute_button_3.clicked.connect(self.set_answer)
+        # коннекты для смены страницы
+        self.ui.task_selection.currentIndexChanged.connect(self.set_task)
+        self.ui.ber_formulas_CB_1.currentIndexChanged.connect(self.set_ber)
+        self.ui.ber_formulas_CB_2.currentIndexChanged.connect(self.set_pol)
 
-        self.ui_widget.subtask_CB.currentIndexChanged.connect(self.set_formulas)
-        self.ui_widget.formulas_CB.currentIndexChanged.connect(self.set_formulas)
+        # коннект для смены формулы бернули
+        self.ui.bernuli_oper_CB.currentIndexChanged.connect(self.change_bernuli_oper)
+
+        # коннекты кнопок
+        self.ui.compute_bernuli_BT.clicked.connect(self.calculate)
+        self.ui.pol_copmute_BT.clicked.connect(self.calculate)
+        self.ui.lap_compudte_BT.clicked.connect(self.calculate)
         # ----------------------------
 
         self.set_formulas()
 
-    def set_behavior(self, new_behavior: AppBehavior):
-        self.behavior = new_behavior
+    def calculate(self):
+        match TaskEnum(self.ui.stackedWidget.currentIndex()):
+            case TaskEnum.bernuli:
+                oper = BernuliOperEnum(
+                    self.ui.bernuli_oper_CB.currentIndex()
+                )
+                n = int(self.ui.n_ber)
+                m = int(self.ui.m_ber)
+                m1 = int(self.ui.m1_ber)
+                m2 = int(self.ui.m2_ber)
+                p = int(self.ui.p_ber)
+                if m1 + m2 > n:
+                    answer = "Неверный входные данные: m1 + m2 > n"
+                else:
+                    answer = f'Ответ: {str(self.bernuli.bernuli_calcul(n, m1, m2, p, oper))}'
+                self.ui.answer_bernuli.setText(answer)
+            case TaskEnum.polynomial:
+                n = int(self.ui.n_pol)
+                k = int(self.ui.k_pol)
+                m = [int(i) for i in self.ui.m_pol.replace(' ', '').split(';')]
+                p = [int(i) for i in self.ui.p_pol.replace(' ', '').split(';')]
+                if len(m) != n or len(p) != k:
+                    answer = "Неверный входные данные"
+                else:
+                    answer = f'Ответ: {self.bernuli.bernuli_polynomial(m, p)}'
+            case TaskEnum.laplace:
+                pass
 
-    def get_user_data(self) -> str:
-        match self.behavior:
-            case AppBehavior.scheme_task:
-                return self.ui_widget.data_LE.text()
-            case AppBehavior.student_task:
-                return (f'{self.ui_widget.subtask_CB.currentIndex()};{self.ui_widget.m1_LE.text()};'
-                        f'{self.ui_widget.m2_LE.text()};{self.ui_widget.n_LE.text()}')
-            case AppBehavior.bayes_task:
-                i = self.ui_widget.gip_number.text()
-                i = '0' if len(i) == 0 else i
-                return (f'{self.ui_widget.formulas_CB.currentIndex()};'
-                        f'{self.ui_widget.gipotez_LE.text()};{self.ui_widget.lineEdit_2.text()};{i}')
 
-    def set_answer(self):
-        answer = self.calculator.calculate(self.get_user_data())
-        match self.behavior:
-            case AppBehavior.scheme_task:
-                self.ui_widget.answer_label.setText(answer)
-            case AppBehavior.student_task:
-                self.ui_widget.answer_label_2.setText(answer[answer.find('_') + 1:])
-                self.ui_widget.probVer_answer_label.setText(answer[0: answer.find('_')])
-            case AppBehavior.bayes_task:
-                self.ui_widget.answer_label_3.setText(answer)
+    def set_task(self):
+        i = self.ui.task_selection.currentIndex()
+        self.ui.stackedWidget.setCurrentIndex(2 if i == 1 else i)
 
-    def task_changed(self):
-        self.notify_observers()
-        self.change_page()
+    def set_ber(self):
+        self.ui.stackedWidget.setCurrentIndex(self.ui.ber_formulas_CB_1.currentIndex())
+        self.ui.ber_formulas_CB_2.setCurrentIndex(
+            self.ui.ber_formulas_CB_1.currentIndex()
+        )
 
-    def change_page(self):
-        self.ui_widget.stackedWidget.setCurrentIndex(2 - self.behavior.value)
-        self.set_formulas()
+    def set_pol(self):
+        self.ui.stackedWidget.setCurrentIndex(self.ui.ber_formulas_CB_2.currentIndex())
+        self.ui.ber_formulas_CB_1.setCurrentIndex(
+            self.ui.ber_formulas_CB_2.currentIndex()
+        )
+
+    def change_bernuli_oper(self):
+        """
+        self.bernuli_oper = ...
+        self.set_formulas
+        """
+        pass
 
     def set_formulas(self):
-        match self.behavior:
-            case AppBehavior.scheme_task:
-                self.ui_widget.sheme_label.setPixmap(self.scheme_pixmap)
-                self.ui_widget.formulas_label.setPixmap(self.first_number_formula)
-            case AppBehavior.student_task:
-                self.ui_widget.promVer_formul_label.setPixmap(self.prom)
-                self.ui_widget.sob_formul_label.setPixmap(
-                    self.sobs[self.ui_widget.subtask_CB.currentIndex()]
-                )
-                self.ui_widget.ver_formul_label.setPixmap(
-                    self.vers[self.ui_widget.subtask_CB.currentIndex()]
-                )
-            case AppBehavior.bayes_task:
-                self.ui_widget.formulas_label_2.setPixmap(
-                    self.fourth_number_formulas[self.ui_widget.formulas_CB.currentIndex()]
-                )
+        pass
 
-    def get_new_behavior(self) -> AppBehavior:
-        return self.ui_widget.task_selection.currentIndex()
-
-    def register_observer(self, observer):
-        self.observers.append(observer)
-
-    def notify_observers(self):
-        for o in self.observers:
-            o.notify_observer()
+    def run(self):
+        self.Widget.show()
+        sys.exit(self.app.exec_())
