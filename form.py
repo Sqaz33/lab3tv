@@ -420,6 +420,12 @@ class Ui_Widget(object):
         self.lap_formulas_LB.setText(_translate("Widget", "TextLabel"))
         self.lap_answer_LB.setText(_translate("Widget", "TextLabel"))
         self.lap_compudte_BT.setText(_translate("Widget", "Вычислить"))
+        self.answer_bernuli.setText("Ответ")
+        self.pol_answer_LB.setText("Ответ")
+        self.lap_x1_answer_LB.font()
+        self.lap_x1_answer_LB.setText("x1 = ...")
+        self.lap_x2_answer_LB.setText("x2 = ...")
+        self.lap_answer_LB.setText("Ответ")
 
 
 if __name__ == "__main__":
