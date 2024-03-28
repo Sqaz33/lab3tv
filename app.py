@@ -18,8 +18,32 @@ class App:
         self.ui = form.Ui_Widget()
         self.ui.setupUi(self.Widget)
 
-        # -----------загрузка картинок------
+        self.ber_f = {
+            BernuliOperEnum.equal: QPixmap(),
+            BernuliOperEnum.less: QPixmap(),
+            BernuliOperEnum.more_or_equal: QPixmap(),
+            BernuliOperEnum.between: QPixmap()
+        }
 
+        # -----------загрузка картинок------
+        self.ber_f[BernuliOperEnum.equal].load("image/equal.png")
+        self.ber_f[BernuliOperEnum.less].load("image/less.png")
+        self.ber_f[BernuliOperEnum.more_or_equal].load("image/more_or_equal.png")
+        self.ber_f[BernuliOperEnum.between].load("image/between.png")
+
+        pol = QPixmap()
+        pol.load("image/pol.png")
+        self.ui.pol_formulas_LB.setPixmap(pol)
+
+        lap = QPixmap()
+        x1 = QPixmap()
+        x2 = QPixmap()
+        lap.load("image/laplace.png")
+        x1.load("image/x1")
+        x2.load("image/x2")
+        self.ui.lap_formulas_LB.setPixmap(lap)
+        self.ui.lap_x1_formulas_LB.setPixmap(x1)
+        self.ui.lap_x2_formulas_LB.setPixmap(x2)
         # ----------------------------------
 
         # ----------коннекты-----------
@@ -37,7 +61,7 @@ class App:
         self.ui.lap_compudte_BT.clicked.connect(self.calculate)
         # ----------------------------
 
-        self.set_formulas()
+        self.change_bernuli_oper()
 
     def calculate(self):
         match TaskEnum(self.ui.stackedWidget.currentIndex()):
@@ -45,11 +69,17 @@ class App:
                 oper = BernuliOperEnum(
                     self.ui.bernuli_oper_CB.currentIndex()
                 )
-                n = int(self.ui.n_ber.text())
-                m = int(self.ui.m_ber.text())
-                m1 = int(self.ui.m1_ber.text())
-                m2 = int(self.ui.m2_ber.text())
-                p = float(self.ui.p_ber.text())
+                i = [
+                    self.ui.n_ber.text(),
+                    self.ui.m_ber.text(),
+                    self.ui.m1_ber.text(),
+                    self.ui.m2_ber.text(),
+                    self.ui.p_ber.text()
+                ]
+
+                i = map(lambda j: 0 if not len(j) else int(j), i)
+                n, m, m1, m2, p = i
+
                 if m1 + m2 > n or p > 1 or p < 0:
                     answer = "Неверный входные данные"
                 else:
@@ -75,9 +105,9 @@ class App:
                     answerx1 = "Неверный входные данные"
                     answerx2 = "Неверный входные данные"
                 else:
-                    answer = self.laplace.laplace_integer(n, m1, m2, p)
-                    answerx1 = self.laplace.x1(n, p, m1)
-                    answerx2 = self.laplace.x2(n, p, m2)
+                    answer = f'Ответ: {self.laplace.laplace_integer(n, m1, m2, p)}'
+                    answerx1 = f'x1 = {self.laplace.x1(n, p, m1)}'
+                    answerx2 = f'x2 = {self.laplace.x2(n, p, m2)}'
                 self.ui.lap_answer_LB.setText(answer)
                 self.ui.lap_x1_answer_LB.setText(answerx1)
                 self.ui.lap_x2_answer_LB.setText(answerx2)
@@ -99,14 +129,11 @@ class App:
         )
 
     def change_bernuli_oper(self):
-        """
-        self.bernuli_oper = ...
-        self.set_formulas
-        """
-        pass
-
-    def set_formulas(self):
-        pass
+        self.ui.bernuli_formulas_LB.setPixmap(
+            self.ber_f[
+                BernuliOperEnum(self.ui.bernuli_oper_CB.currentIndex())
+            ]
+        )
 
     def run(self):
         self.Widget.show()
