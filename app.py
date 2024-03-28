@@ -91,17 +91,17 @@ class App:
                 k = int(self.ui.k_pol.text())
                 m = [int(i) for i in self.ui.m_pol.text().replace(' ', '').split(';')]
                 p = [float(i) for i in self.ui.p_pol.text().replace(' ', '').split(';')]
-                if len(m) != n or len(p) != k:
+                if len(m) != k or len(p) != k:
                     answer = "Неверный входные данные"
                 else:
                     answer = f'Ответ: {self.bernuli.bernuli_polynomial(m, p)}'
-                    self.ui.pol_answer_LB.setText(answer)
+                self.ui.pol_answer_LB.setText(answer)
             case TaskEnum.laplace:
                 n = int(self.ui.n_lap.text())
                 p = float(self.ui.p_lap.text())
-                m1 = int(self.ui.m1_lapa.text())
+                m1 = int(self.ui.m1_lap.text())
                 m2 = int(self.ui.m2_lap.text())
-                if m1 > n or m2 > n:
+                if m1 > n or m2 > n or p > 1:
                     answer = "Неверный входные данные"
                     answerx1 = "Неверный входные данные"
                     answerx2 = "Неверный входные данные"
