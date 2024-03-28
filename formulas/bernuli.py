@@ -15,10 +15,10 @@ class BernuliCalcul:
     def bernuli_in_range(self, n: int, m1: int, m2: int, p: float) -> float:
         return sum(self.bernuli(n, m, p) for m in range(m1, m2+1))
 
-    def bernuli_calcul(self, n: int, m1: int, m2: int, p: float, operation: BernuliOperEnum) -> float:
+    def bernuli_calcul(self, n: int, m: int, m1: int, m2: int, p: float, operation: BernuliOperEnum) -> float:
         match operation:
             case BernuliOperEnum.equal:
-                return self.bernuli(n, m1, p)
+                return self.bernuli(n, m, p)
             case BernuliOperEnum.less:
                 return self.bernuli_in_range(n, 0, m1-1, p)
             case BernuliOperEnum.more_or_equal:

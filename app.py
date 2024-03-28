@@ -73,17 +73,18 @@ class App:
                     self.ui.n_ber.text(),
                     self.ui.m_ber.text(),
                     self.ui.m1_ber.text(),
-                    self.ui.m2_ber.text(),
-                    self.ui.p_ber.text()
+                    self.ui.m2_ber.text()
                 ]
 
                 i = map(lambda j: 0 if not len(j) else int(j), i)
-                n, m, m1, m2, p = i
+                n, m, m1, m2 = i
+                p = self.ui.p_ber.text()
+                p = 0 if not len(p) else float(p)
 
                 if m1 + m2 > n or p > 1 or p < 0:
                     answer = "Неверный входные данные"
                 else:
-                    answer = f'Ответ: {str(self.bernuli.bernuli_calcul(n, m1, m2, p, oper))}'
+                    answer = f'Ответ: {str(self.bernuli.bernuli_calcul(n, m, m1, m2, p, oper))}'
                 self.ui.answer_bernuli.setText(answer)
             case TaskEnum.polynomial:
                 n = int(self.ui.n_pol.text())
