@@ -50,8 +50,8 @@ class App:
                 m1 = int(self.ui.m1_ber)
                 m2 = int(self.ui.m2_ber)
                 p = int(self.ui.p_ber)
-                if m1 + m2 > n:
-                    answer = "Неверный входные данные: m1 + m2 > n"
+                if m1 + m2 > n or p > 1 or p < 0:
+                    answer = "Неверный входные данные"
                 else:
                     answer = f'Ответ: {str(self.bernuli.bernuli_calcul(n, m1, m2, p, oper))}'
                 self.ui.answer_bernuli.setText(answer)
@@ -64,9 +64,23 @@ class App:
                     answer = "Неверный входные данные"
                 else:
                     answer = f'Ответ: {self.bernuli.bernuli_polynomial(m, p)}'
+                    self.ui.pol_answer_LB.setText(answer)
             case TaskEnum.laplace:
-                pass
-
+                n = int(self.ui.n_lap)
+                p = int(self.ui.p_lap)
+                m1 = int(self.ui.m1_lapa)
+                m2 = int(self.ui.m2_lap)
+                if m1 + m2 > n:
+                    answer = "Неверный входные данные"
+                    answerx1 = "Неверный входные данные"
+                    answerx2 = "Неверный входные данные"
+                else:
+                    answer = self.laplace.laplace_integer(n, m1, m2, p)
+                    answerx1 = self.laplace.x1(n, p, m1)
+                    answerx2 = self.laplace.x2(n, p, m2)
+                self.ui.lap_answer_LB.setText(answer)
+                self.ui.lap_x1_answer_LB.setText(answerx1)
+                self.ui.lap_x2_answer_LB.setText(answerx2)
 
     def set_task(self):
         i = self.ui.task_selection.currentIndex()
