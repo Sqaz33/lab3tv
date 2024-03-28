@@ -45,31 +45,31 @@ class App:
                 oper = BernuliOperEnum(
                     self.ui.bernuli_oper_CB.currentIndex()
                 )
-                n = int(self.ui.n_ber)
-                m = int(self.ui.m_ber)
-                m1 = int(self.ui.m1_ber)
-                m2 = int(self.ui.m2_ber)
-                p = int(self.ui.p_ber)
+                n = int(self.ui.n_ber.text())
+                m = int(self.ui.m_ber.text())
+                m1 = int(self.ui.m1_ber.text())
+                m2 = int(self.ui.m2_ber.text())
+                p = float(self.ui.p_ber.text())
                 if m1 + m2 > n or p > 1 or p < 0:
                     answer = "Неверный входные данные"
                 else:
                     answer = f'Ответ: {str(self.bernuli.bernuli_calcul(n, m1, m2, p, oper))}'
                 self.ui.answer_bernuli.setText(answer)
             case TaskEnum.polynomial:
-                n = int(self.ui.n_pol)
-                k = int(self.ui.k_pol)
-                m = [int(i) for i in self.ui.m_pol.replace(' ', '').split(';')]
-                p = [int(i) for i in self.ui.p_pol.replace(' ', '').split(';')]
+                n = int(self.ui.n_pol.text())
+                k = int(self.ui.k_pol.text())
+                m = [int(i) for i in self.ui.m_pol.text().replace(' ', '').split(';')]
+                p = [float(i) for i in self.ui.p_pol.text().replace(' ', '').split(';')]
                 if len(m) != n or len(p) != k:
                     answer = "Неверный входные данные"
                 else:
                     answer = f'Ответ: {self.bernuli.bernuli_polynomial(m, p)}'
                     self.ui.pol_answer_LB.setText(answer)
             case TaskEnum.laplace:
-                n = int(self.ui.n_lap)
-                p = int(self.ui.p_lap)
-                m1 = int(self.ui.m1_lapa)
-                m2 = int(self.ui.m2_lap)
+                n = int(self.ui.n_lap.text())
+                p = float(self.ui.p_lap.text())
+                m1 = int(self.ui.m1_lapa.text())
+                m2 = int(self.ui.m2_lap.text())
                 if m1 + m2 > n:
                     answer = "Неверный входные данные"
                     answerx1 = "Неверный входные данные"
