@@ -20,9 +20,9 @@ class BernuliCalcul:
             case BernuliOperEnum.equal:
                 return self.bernuli(n, m, p)
             case BernuliOperEnum.less:
-                return self.bernuli_in_range(n, 0, m1-1, p)
+                return self.bernuli_in_range(n, 0, m-1, p)
             case BernuliOperEnum.more_or_equal:
-                return self.bernuli_in_range(n, m1, n, p)
+                return self.bernuli_in_range(n, m, n, p)
             case BernuliOperEnum.between:
                 return self.bernuli_in_range(n, m1, m2, p)
 

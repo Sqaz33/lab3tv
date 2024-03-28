@@ -81,7 +81,7 @@ class App:
                 p = self.ui.p_ber.text()
                 p = 0 if not len(p) else float(p)
 
-                if m1 + m2 > n or p > 1 or p < 0:
+                if m1 > n or m2 > n or p > 1 or p < 0:
                     answer = "Неверный входные данные"
                 else:
                     answer = f'Ответ: {str(self.bernuli.bernuli_calcul(n, m, m1, m2, p, oper))}'
@@ -101,7 +101,7 @@ class App:
                 p = float(self.ui.p_lap.text())
                 m1 = int(self.ui.m1_lapa.text())
                 m2 = int(self.ui.m2_lap.text())
-                if m1 + m2 > n:
+                if m1 > n or m2 > n:
                     answer = "Неверный входные данные"
                     answerx1 = "Неверный входные данные"
                     answerx2 = "Неверный входные данные"
