@@ -81,8 +81,12 @@ class App:
                 p = self.ui.p_ber.text()
                 p = 0 if not len(p) else float(p)
 
-                if m1 > n or m2 > n or p > 1 or p < 0:
-                    answer = "Неверный входные данные"
+                if m1 > n:
+                    answer = "Неверный входные данные: m1 > n"
+                elif m2 > n:
+                    answer = "Неверный входные данные: m2 > n"
+                elif p > 1 or p < 0:
+                    answer = "Неверный входные данные: p > 1 или p < 0"
                 else:
                     answer = f'Ответ: {str(self.bernuli.bernuli_calcul(n, m, m1, m2, p, oper))}'
                 self.ui.answer_bernuli.setText(answer)
@@ -91,9 +95,12 @@ class App:
                 k = int(self.ui.k_pol.text())
                 m = [int(i) for i in self.ui.m_pol.text().replace(' ', '').split(';')]
                 p = [float(i) for i in self.ui.p_pol.text().replace(' ', '').split(';')]
-                #вывод конкретной ошибки
-                if len(m) != k or len(p) != k or sum(p) != 1:
-                    answer = "Неверный входные данные"
+                if len(m) != k:
+                    answer = "Неверный входные данные: количество десятичных чисел != k"
+                elif len(p) != k:
+                    answer = "Неверный входные данные: количество вероятностей != k"
+                elif sum(p) != 1:
+                    answer = "Неверный входные данные: сумма верояностей != 1"
                 else:
                     answer = f'Ответ: {self.bernuli.bernuli_polynomial(m, p)}'
                 self.ui.pol_answer_LB.setText(answer)
@@ -102,10 +109,14 @@ class App:
                 p = float(self.ui.p_lap.text())
                 m1 = int(self.ui.m1_lap.text())
                 m2 = int(self.ui.m2_lap.text())
-                if m1 > n or m2 > n or p > 1:
-                    answer = "Неверный входные данные"
-                    answerx1 = "Неверный входные данные"
-                    answerx2 = "Неверный входные данные"
+                answerx1 = "Неверный входные данные"
+                answerx2 = "Неверный входные данные"
+                if m1 > n:
+                    answer = "Неверный входные данные: m1 > n"
+                elif m2 > n:
+                    answer = "Неверный входные данные: m2 > n"
+                elif p > 1 or p < 0:
+                    answer = "Неверный входные данные: p > 1 или p < 0"
                 else:
                     answer = f'Ответ: {self.laplace.laplace_integer(n, m1, m2, p)}'
                     answerx1 = f'x1 = {self.laplace.x1(n, p, m1)}'
