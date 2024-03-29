@@ -91,7 +91,8 @@ class App:
                 k = int(self.ui.k_pol.text())
                 m = [int(i) for i in self.ui.m_pol.text().replace(' ', '').split(';')]
                 p = [float(i) for i in self.ui.p_pol.text().replace(' ', '').split(';')]
-                if len(m) != k or len(p) != k:
+                #вывод конкретной ошибки
+                if len(m) != k or len(p) != k or sum(p) != 1:
                     answer = "Неверный входные данные"
                 else:
                     answer = f'Ответ: {self.bernuli.bernuli_polynomial(m, p)}'
